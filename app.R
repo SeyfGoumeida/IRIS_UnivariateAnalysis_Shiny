@@ -95,9 +95,47 @@ ui <- fluidPage(
                                     )
                                     
                            ),
+                           tabPanel("Pie", 
+                                    fluidRow(
+                                      column(12, 
+                                             plotOutput(outputId = "Pie")
+                                      )
+                                    ),
+                                    fluidRow(
+                                      column(12, 
+                                             plotOutput(outputId = "Pie2")
+                                      )
+                                    ),
+                                    fluidRow(
+                                      column(12, 
+                                             plotOutput(outputId = "Pie3")
+                                      )
+                                    )
+                                    
+                           ),
                            tabPanel("Pairs", 
                                     
                                     plotOutput(outputId = "Pairs")
+                           ),
+                           tabPanel("Nuage", 
+                                    fluidRow(
+                                      column(6, 
+                                             plotOutput(outputId = "Nuage")
+                                             
+                                      ),
+                                      column(6, 
+                                             plotOutput(outputId = "Nuage2")
+                                             
+                                      ),
+                                      column(6, 
+                                             plotOutput(outputId = "Nuage3")
+                                             
+                                      ),
+                                      column(6, 
+                                             plotOutput(outputId = "Nuage4")
+                                             
+                                      )
+                                    )
                            ),
                            tabPanel("About", 
                                     
@@ -217,7 +255,7 @@ server <- function(input, output) {
     })
     
     
-    
+    #-------------------------------Summary----------------------------
     #pairs(iris[,1:4])
     #k = describe(iris) 
     k = summary(iris)
@@ -313,16 +351,51 @@ server <- function(input, output) {
         paste("<h4>Petal Width  :",result.third_Quartilepw,"</h4>")
       )
     })
+    #-------------------------Pie--------------------------------------
+    output$Pie <- renderPlot({
+      pie(table(iris$Species), labels = names(table(iris$Species)), 
+          main = "Species", col=c())    
+      })
     
+    output$Pie2 <- renderPlot({
+      pie(table(iris$Sepal.Length), labels = names(table(iris$Sepal.Length)), 
+          main = "Sepal.Length", col=c())    
+    })
     
+    output$Pie3 <- renderPlot({
+      pie(table(iris$Petal.Length), labels = names(table(iris$Petal.Length)), 
+          main = "Petal.Length", col=c())    
+    })
+    #----------------------PAIRS--------------------------------------
     output$Pairs <- renderPlot({
       
       pairs(iris[,1:4])
       
     })
+    #-----------------------NUAGE---------------------------------------
+    library(ggplot2)
     
-    
-    
+    output$Nuage <- renderPlot({
+      # Basic scatter plot
+      ggplot(iris, aes(x=Sepal.Length, y=Sepal.Width)) + geom_point()
+      
+    })
+    output$Nuage2 <- renderPlot({
+      # Basic scatter plot
+      ggplot(iris, aes(x=Petal.Length, y=Petal.Width)) + geom_point()
+      
+    })
+    output$Nuage3 <- renderPlot({
+      # Basic scatter plot
+      ggplot(iris, aes(x=Sepal.Length, y=Petal.Length)) + geom_point()
+      
+    })
+    output$Nuage4 <- renderPlot({
+      # Basic scatter plot
+      ggplot(iris, aes(x=Sepal.Width, y=Petal.Width)) + geom_point()
+      
+    })
+    #----------------------ABOUT------------------------------------------
     output$About <- renderUI({
         
         HTML(
